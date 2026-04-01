@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "Quarkus CRUD - OpenShift",
+    "_postman_id": "quarkus-crud-openshift-collection",
+    "description": "Colección de pruebas para los endpoints /hello y /produtos del proyecto Quarkus CRUD desplegado en OpenShift.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "description": "Cambia este valor por la Route pública generada por OpenShift (ej: http://quarkus-crud-<proyecto>.apps-crc.testing)"
+    }
+  ],
+  "item": [
+    {
+      "name": "Hello",
+      "item": [
+        {
+          "name": "GET /hello",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hello",
+              "host": ["{{baseUrl}}"],
+              "path": ["hello"]
+            },
+            "description": "Endpoint de bienvenida. Devuelve 'Hello RESTEasy'."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Produtos - CRUD",
+      "item": [
+        {
+          "name": "GET /produtos - Listar todos",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produtos",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos"]
+            },
+            "description": "Retorna la lista completa de produtos."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /produtos/:id - Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1"]
+            },
+            "description": "Retorna un produto por su ID. Cambia el '1' por el ID real."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /produtos - Crear",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Laptop\",\n  \"precio\": 999.99,\n  \"stock\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/produtos",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos"]
+            },
+            "description": "Crea un nuevo produto. Retorna 201 Created con el recurso creado."
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /produtos/:id - Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Laptop Pro\",\n  \"precio\": 1299.99,\n  \"stock\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1"]
+            },
+            "description": "Actualiza un produto existente por ID. Cambia el '1' por el ID real."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /produtos/:id - Eliminar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1"]
+            },
+            "description": "Elimina un produto por ID. Retorna 204 No Content."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
