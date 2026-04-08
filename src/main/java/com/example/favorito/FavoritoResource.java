@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Path("/favoritos")
+@Path("/api/favoritos")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)

@@ -46,7 +46,7 @@
               "mode": "raw",
               "raw": "{\n  \"tipo\": \"CENTRO\",\n  \"referenciaId\": \"SUC-001\",\n  \"descripcion\": \"Sucursal Central\"\n}"
             },
-            "url": "{{baseUrl}}/favoritos"
+            "url": "{{baseUrl}}/api/favoritos"
           }
         },
         {
@@ -74,7 +74,7 @@
               "mode": "raw",
               "raw": "{\n  \"tipo\": \"CENTRO\",\n  \"referenciaId\": \"SUC-001\",\n  \"descripcion\": \"Sucursal Central\"\n}"
             },
-            "url": "{{baseUrl}}/favoritos"
+            "url": "{{baseUrl}}/api/favoritos"
           }
         },
         {
@@ -98,7 +98,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "Accept", "value": "application/json" }],
-            "url": "{{baseUrl}}/favoritos"
+            "url": "{{baseUrl}}/api/favoritos"
           }
         },
         {
@@ -119,7 +119,7 @@
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/favoritos/{{favoritoId}}"
+            "url": "{{baseUrl}}/api/favoritos/{{favoritoId}}"
           }
         },
         {
@@ -140,7 +140,7 @@
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/favoritos/99999"
+            "url": "{{baseUrl}}/api/favoritos/99999"
           }
         }
       ]
