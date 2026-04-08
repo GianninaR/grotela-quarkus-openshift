@@ -2,17 +2,149 @@
   "info": {
     "name": "Quarkus CRUD - OpenShift",
     "_postman_id": "quarkus-crud-openshift-collection",
-    "description": "Colección de pruebas para los endpoints /hello y /produtos del proyecto Quarkus CRUD desplegado en OpenShift.",
+    "description": "Colección de pruebas para los endpoints /hello, /productos y middleware del proyecto Quarkus CRUD desplegado en OpenShift.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "baseUrl",
       "value": "http://localhost:8080",
-      "description": "Cambia este valor por la Route pública generada por OpenShift (ej: http://quarkus-crud-<proyecto>.apps-crc.testing)"
+      "description": "Cambia este valor por la Route pública generada por OpenShift"
     }
   ],
   "item": [
+    {
+      "name": "Favoritos",
+      "item": [
+        {
+          "name": "POST /favoritos - Crear",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Respuesta contiene id', function () {",
+                  "    var json = pm.response.json();",
+                  "    pm.expect(json.id).to.be.a('number');",
+                  "    pm.collectionVariables.set('favoritoId', json.id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"CENTRO\",\n  \"referenciaId\": \"SUC-001\",\n  \"descripcion\": \"Sucursal Central\"\n}"
+            },
+            "url": "{{baseUrl}}/favoritos"
+          }
+        },
+        {
+          "name": "POST /favoritos - 409 Conflict (duplicado)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409 Conflict', function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"CENTRO\",\n  \"referenciaId\": \"SUC-001\",\n  \"descripcion\": \"Sucursal Central\"\n}"
+            },
+            "url": "{{baseUrl}}/favoritos"
+          }
+        },
+        {
+          "name": "GET /favoritos - Listar todos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Respuesta es un array', function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{baseUrl}}/favoritos"
+          }
+        },
+        {
+          "name": "DELETE /favoritos/:id - Eliminar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/favoritos/{{favoritoId}}"
+          }
+        },
+        {
+          "name": "DELETE /favoritos/:id - 404 Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404 Not Found', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/favoritos/99999"
+          }
+        }
+      ]
+    },
     {
       "name": "Hello",
       "item": [
@@ -21,54 +153,32 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/hello",
-              "host": ["{{baseUrl}}"],
-              "path": ["hello"]
-            },
-            "description": "Endpoint de bienvenida. Devuelve 'Hello RESTEasy'."
-          },
-          "response": []
+            "url": "{{baseUrl}}/hello"
+          }
         }
       ]
     },
     {
-      "name": "Produtos - CRUD",
+      "name": "Productos - CRUD",
       "item": [
         {
-          "name": "GET /produtos - Listar todos",
+          "name": "GET /productos - Listar todos",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Accept", "value": "application/json" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/produtos",
-              "host": ["{{baseUrl}}"],
-              "path": ["produtos"]
-            },
-            "description": "Retorna la lista completa de produtos."
-          },
-          "response": []
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{baseUrl}}/productos"
+          }
         },
         {
-          "name": "GET /produtos/:id - Buscar por ID",
+          "name": "GET /productos/:id - Buscar por ID",
           "request": {
             "method": "GET",
-            "header": [
-              { "key": "Accept", "value": "application/json" }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/produtos/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["produtos", "1"]
-            },
-            "description": "Retorna un produto por su ID. Cambia el '1' por el ID real."
-          },
-          "response": []
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{baseUrl}}/productos/1"
+          }
         },
         {
-          "name": "POST /produtos - Crear",
+          "name": "POST /productos - Crear",
           "request": {
             "method": "POST",
             "header": [
@@ -79,17 +189,11 @@
               "mode": "raw",
               "raw": "{\n  \"nombre\": \"Laptop\",\n  \"precio\": 999.99,\n  \"stock\": 10\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/produtos",
-              "host": ["{{baseUrl}}"],
-              "path": ["produtos"]
-            },
-            "description": "Crea un nuevo produto. Retorna 201 Created con el recurso creado."
-          },
-          "response": []
+            "url": "{{baseUrl}}/productos"
+          }
         },
         {
-          "name": "PUT /produtos/:id - Actualizar",
+          "name": "PUT /productos/:id - Actualizar",
           "request": {
             "method": "PUT",
             "header": [
@@ -100,28 +204,39 @@
               "mode": "raw",
               "raw": "{\n  \"nombre\": \"Laptop Pro\",\n  \"precio\": 1299.99,\n  \"stock\": 5\n}"
             },
-            "url": {
-              "raw": "{{baseUrl}}/produtos/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["produtos", "1"]
-            },
-            "description": "Actualiza un produto existente por ID. Cambia el '1' por el ID real."
-          },
-          "response": []
+            "url": "{{baseUrl}}/productos/1"
+          }
         },
         {
-          "name": "DELETE /produtos/:id - Eliminar",
+          "name": "DELETE /productos/:id - Eliminar",
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/produtos/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["produtos", "1"]
-            },
-            "description": "Elimina un produto por ID. Retorna 204 No Content."
-          },
-          "response": []
+            "url": "{{baseUrl}}/productos/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Middleware Interfisa",
+      "item": [
+        {
+          "name": "GET /api/sucursales - Centros de Servicio",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/sucursales",
+            "description": "Consulta pública de centros de servicio (Microcentro) vía Middleware Interfisa."
+          }
+        },
+        {
+          "name": "GET /api/sipap - Parámetros SIPAP",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/sipap",
+            "description": "Consulta segura de motivos SIPAP usando JWT inyectado desde ConfigMap."
+          }
         }
       ]
     }
